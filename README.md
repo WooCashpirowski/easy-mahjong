@@ -1,6 +1,6 @@
 # Mahjong
 
-Wymagany Node.js 20 lub nowszy. Bez instalacji zależności.
+Wymagany Node.js 24. Bez instalacji zależności.
 
 ```sh
 npm start
@@ -9,6 +9,8 @@ npm start
 Otwórz http://localhost:5173. Testy: `npm test`.
 
 PWA: `npm run build`, następnie opublikuj zawartość `dist/` na hostingu HTTPS (także w podkatalogu). Podgląd paczki: `npm run preview`. Każdy build otrzymuje wersję cache wyliczoną z plików. Nie ustawiaj długiego cache HTTP dla `sw.js`.
+
+Vercel: zaimportuj repozytorium. `vercel.json` ustawia hosting statyczny, build `npm run build` i katalog `dist`. `scripts/serve.mjs` służy wyłącznie do lokalnego podglądu.
 
 Na tablecie otwórz adres HTTPS. Android/Chrome: menu → „Zainstaluj aplikację”. iPad/Safari: Udostępnij → „Do ekranu początkowego”. Po komunikacie „Gra jest gotowa do działania offline” internet nie jest wymagany. Aktualizację wczytuje przycisk w panelu; resetuje planszę, zachowuje ranking. Wyniki pozostają lokalne dla danej aplikacji i adresu — instalacja na innym urządzeniu ich nie przenosi.
 

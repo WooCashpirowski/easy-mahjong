@@ -3,3 +3,4 @@ coverage/
 artifacts/
 dist/
 mahjong-pwa.zip
+.vercel/

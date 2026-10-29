@@ -124,7 +124,7 @@ test('aktualizacja czeka na świadome odświeżenie i nie przechwytuje obcych ż
 });
 
 test('serwer udostępnia manifest i ikony z poprawnym MIME, bez kodu narzędziowego', async t => {
-  const server = spawn(process.execPath, ['server.mjs'], { cwd: fileURLToPath(root), env: { ...process.env, PORT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  const server = spawn(process.execPath, ['scripts/serve.mjs'], { cwd: fileURLToPath(root), env: { ...process.env, PORT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
   t.after(() => server.kill());
   const [output] = await once(server.stdout, 'data');
   const port = output.toString().match(/:(\d+)/)?.[1];

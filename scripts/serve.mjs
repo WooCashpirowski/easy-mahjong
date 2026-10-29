@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const projectRoot = dirname(fileURLToPath(import.meta.url));
+const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const root = process.argv.includes('--dist') ? resolve(projectRoot, 'dist') : projectRoot;
 const port = Number(process.env.PORT || 5173);
 const host = process.env.HOST || '127.0.0.1';
