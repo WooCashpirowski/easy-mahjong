@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#10131f">
+    <meta name="description" content="Klasyczny Mahjong. 144 płytki, chwila skupienia i Twoje najlepsze czasy.">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Mahjong">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mahjong — chwila skupienia</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="game-toolbar" aria-label="Sterowanie grą Mahjong">
+        <h1 class="sr-only">Mahjong</h1>
+        <div class="stats">
+          <div class="stat stat-time"><span class="stat-label">TWÓJ CZAS</span><div class="time-row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M9 2h6M12 5V2m0 6v5l3 2"/></svg><span id="timer">00:00</span><button id="pause-button" class="pause-button" aria-label="Wstrzymaj grę" aria-keyshortcuts="Escape" title="Pauza (Esc)" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg></button></div></div>
+          <div class="stat"><span class="stat-label">PŁYTKI</span><div class="stat-value"><span id="remaining">144</span><span class="stat-total"> / 144</span></div></div>
+          <div class="stat"><span class="stat-label"><span class="stat-label-detail">DOSTĘPNE </span>PARY</span><div class="stat-value" id="pair-count">—</div></div>
+        </div>
+        <div class="assist-actions">
+          <button id="hint-button" class="button button-quiet" title="Podpowiedź: +30 sekund"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M8 14a6 6 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/></svg>Podpowiedź<span class="penalty">+30 s</span></button>
+          <button id="shuffle-button" class="button button-quiet" title="Tasowanie: +30 sekund, bez kary przy braku par"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m17 3 4 4-4 4M3 17h3c5 0 5-10 10-10h5M17 13l4 4-4 4M3 7h3c2 0 3 2 4 4m4 4c1 2 2 2 4 2h3"/></svg>Tasuj<span class="penalty" id="shuffle-penalty">+30 s</span></button>
+        </div>
+        <div class="session-actions">
+          <button id="new-game-button" class="button button-primary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nowa gra</span></button>
+          <button class="button button-secondary panel-toggle" id="panel-button" aria-label="Wyniki i zasady" title="Wyniki i zasady" aria-haspopup="dialog" aria-controls="sidebar-dialog" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16m3-11v2m0 3v2"/></svg><span>Wyniki i zasady</span></button>
+        </div>
+      </header>
+
+      <main class="play-surface" id="play-surface" aria-label="Gra Mahjong">
+        <div id="board" class="tile-field" role="group" aria-label="Plansza: klasyczny żółw, 144 płytki"></div>
+        <div class="board-overlay" id="board-overlay" hidden>
+          <div class="overlay-card"><div class="overlay-symbol" id="overlay-symbol" aria-hidden="true">Ⅱ</div><span class="eyebrow" id="overlay-eyebrow">CHWILA ODDECHU</span><h2 id="overlay-title">Gra wstrzymana</h2><p id="overlay-message">Wróć, kiedy zechcesz. Czas poczeka.</p><button class="button button-primary" id="overlay-action">Wznów grę</button></div>
+        </div>
+        <div class="status-line" role="status" aria-live="polite" id="status">Wybierz pierwszą płytkę, aby rozpocząć pomiar czasu.</div>
+      </main>
+    </div>
+
+    <dialog id="sidebar-dialog" class="sidebar-drawer" aria-labelledby="sidebar-heading">
+      <div class="drawer-heading"><div><span class="eyebrow">TWOJA GRA</span><h2 id="sidebar-heading">Wyniki i zasady</h2></div><button class="icon-button" id="close-panel-button" aria-label="Zamknij panel">×</button></div>
+      <aside class="sidebar">
+          <section class="pwa-panel" id="pwa-panel" aria-labelledby="pwa-heading">
+            <span class="eyebrow">TWOJA GRA. ZAWSZE POD RĘKĄ.</span>
+            <h2 id="pwa-heading" data-pwa-heading>Zabierz Mahjong ze sobą</h2>
+            <p class="pwa-status" data-pwa-status role="status">Przygotowywanie gry offline…</p>
+            <button class="button button-primary" data-pwa-install hidden>Zainstaluj aplikację</button>
+            <details class="install-instructions" data-pwa-instructions>
+              <summary>Jak zainstalować na tablecie?</summary>
+              <p><strong>Android · Chrome</strong>Otwórz menu ⋮ i wybierz „Zainstaluj aplikację” lub „Dodaj do ekranu głównego”.</p>
+              <p><strong>iPad · Safari</strong>Wybierz „Udostępnij”, następnie „Do ekranu początkowego” i „Dodaj”. Jeśli pojawi się opcja „Otwieraj jako aplikację internetową”, pozostaw ją włączoną.</p>
+              <p>Po pierwszym uruchomieniu online możesz grać bez internetu. Wyniki są zapisywane na tym urządzeniu.</p>
+            </details>
+            <div class="pwa-update" data-pwa-update hidden><p>Nowa wersja jest gotowa. Odświeżenie rozpocznie nową grę; zapisane wyniki pozostaną.</p><button class="button button-secondary" data-pwa-refresh>Odśwież aplikację</button></div>
+          </section>
+          <section class="ranking-panel" aria-labelledby="ranking-heading">
+            <div class="section-heading"><span class="eyebrow">TWÓJ OSOBISTY REKORD</span><svg class="icon trophy" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v6a4 4 0 0 1-8 0V3Zm0 2H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4m-4 1v6m-4 2h8"/></svg></div>
+            <h2 id="ranking-heading">Najlepsze czasy</h2>
+            <p class="section-description">Małe zwycięstwa. Dobre tempo.</p>
+            <div id="ranking-content"></div>
+            <p class="storage-note"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg>10 wyników, tylko w tej przeglądarce.</p>
+          </section>
+
+          <section class="how-to" aria-labelledby="how-to-heading"><span class="eyebrow">PROSTE ZASADY, DOBRA GRA</span><h2 id="how-to-heading">Znajdź swoją parę.</h2><div class="example-pair" aria-hidden="true"><span>中</span><span>中</span><svg class="icon" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div><p>Łącz identyczne, wolne płytki. Płytka jest wolna, gdy nic jej nie przykrywa i ma odsłonięty przynajmniej jeden bok.</p><div class="tile-legend"><p><strong>1–9</strong><span>Znaki — rozpoznawaj je po cyfrze.</span></p><p><strong>E S W N</strong><span>Wiatry — wschód, południe, zachód, północ.</span></p><p><strong>KW / PR</strong><span>Dowolne dwa kwiaty lub dwie pory roku tworzą parę.</span></p></div><button id="more-rules-button" class="text-button">Wszystkie zasady <span aria-hidden="true">↗</span></button></section>
+          <div class="sidebar-bottom"><span class="online-dot"></span> Bez konta. Bez pośpiechu.</div>
+      </aside>
+    </dialog>
+
+    <dialog id="rules-dialog" class="dialog"><div class="dialog-heading"><span class="eyebrow">JAK GRAĆ</span><button class="icon-button" data-close-dialog aria-label="Zamknij zasady">×</button></div><h2>Odsłoń całą planszę.</h2><p>Usuń wszystkie 144 płytki, łącząc je w 72 pary.</p><ol class="rules-list"><li><strong>Wybieraj wolne płytki.</strong> Nic nie może leżeć na płytce. Jej lewy lub prawy bok musi być odsłonięty. Jasne płytki są dostępne.</li><li><strong>Łącz takie same symbole.</strong> Cyfry 1–9 oznaczają wartości znaków, a litery E/S/W/N — wiatry. Wyjątki to kwiaty (KW) i pory roku (PR): dowolne dwa kwiaty lub dowolne dwie pory roku tworzą parę.</li><li><strong>Korzystaj z pomocy.</strong> Podpowiedź dodaje 30 sekund. Tasowanie też dodaje 30 sekund, chyba że nie ma już dostępnych par.</li><li><strong>Graj w swoim tempie.</strong> Zegar rusza po wybraniu pierwszej płytki. Podczas pauzy plansza jest ukryta, a czas nie płynie. Otwarcie panelu i zmiana karty automatycznie wstrzymują grę.</li></ol><p class="dialog-note">Po ukończeniu gry wynik trafia do lokalnego rankingu 10 najlepszych czasów. Każde nowe rozdanie i tasowanie ma przynajmniej jedną drogę do zwycięstwa.</p><button class="button button-primary" data-close-dialog>Wszystko jasne</button></dialog>
+    <dialog id="new-game-dialog" class="dialog dialog-small"><span class="eyebrow">NOWE ROZDANIE</span><h2>Zacząć od nowa?</h2><p>Bieżąca plansza i jej czas zostaną zresetowane.</p><div class="dialog-actions"><button class="button button-secondary" id="cancel-new-game">Graj dalej</button><button class="button button-primary" id="confirm-new-game">Nowa gra</button></div></dialog>
+    <noscript>Włącz JavaScript w przeglądarce, aby zagrać w Mahjong.</noscript>
+  </body>
+</html>
