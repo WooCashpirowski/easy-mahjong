@@ -155,12 +155,84 @@ test('tasowanie dodaje karę tylko wtedy, gdy przed tasowaniem istnieje para', (
   assert.ok(stuck.pairs.length > 0);
 });
 
+test('usunięcie ostatniej dostępnej pary automatycznie tasuje pozostałe płytki bez kary', () => {
+  let now = 1000;
+  const initial = [tile(0, 0, 1), tile(1, 1, 1), tile(2, 2, 2), tile(3, 3, 2), tile(4, 0, 3, 2), tile(5, 1, 3, 2)];
+  const game = new MahjongGame({
+    now: () => now,
+    random: seededRandom(3),
+    createDeal: options => options.positions ? createSolvableDeal(options) : { tiles: initial },
+  });
+  assert.equal(game.pairs.length, 1);
+  game.select(4);
+  now += 1234;
+  const result = game.select(5);
+  assert.equal(result.type, 'removed');
+  assert.equal(result.shuffled, true);
+  assert.deepEqual(result.ids, [4, 5]);
+  assert.equal(game.tiles.length, 4);
+  assert.equal(game.selectedId, null);
+  assert.equal(game.status, 'running');
+  assert.equal(game.elapsedMs, 1234);
+  assert.ok(game.pairs.length > 0);
+  const remaining = initial.slice(0, 4);
+  const positions = tiles => tiles.map(({ id, x, y, z }) => ({ id, x, y, z }));
+  const faces = tiles => tiles.map(tile => `${tile.face.suit}:${tile.face.value}`).sort();
+  assert.deepEqual(positions(game.tiles), positions(remaining));
+  assert.deepEqual(faces(game.tiles), faces(remaining));
+  now += 2000;
+  assert.equal(game.elapsedMs, 3234);
+});
+
+test('automatyczne tasowanie odblokowuje ostatnie płytki leżące jedna na drugiej', () => {
+  const initial = [tile(0, 0, 1), tile(1, 0, 1, 0, 1), tile(2, 3, 2), tile(3, 4, 2)];
+  const game = new MahjongGame({
+    now: () => 0,
+    random: seededRandom(7),
+    createDeal: options => options.positions ? createSolvableDeal(options) : { tiles: initial },
+  });
+  game.select(2);
+  assert.equal(game.select(3).shuffled, true);
+  assert.deepEqual(game.tiles.map(tile => tile.id).sort(), [0, 1]);
+  assert.equal(game.freeTiles.length, 2);
+  assert.equal(game.pairs.length, 1);
+  assert.equal(game.elapsedMs, 0);
+  assert.ok(game.tiles.every(tile => tile.face.suit === 'dots' && tile.face.value === 1));
+  game.select(0);
+  const result = game.select(1);
+  assert.equal(result.type, 'won');
+  assert.equal(result.shuffled, false);
+  assert.equal(game.tiles.length, 0);
+});
+
+test('100 gier z losowym wyborem par kończy się bez zablokowania planszy i bez kar za automatyczne tasowanie', () => {
+  let shuffles = 0;
+  for (let seed = 1; seed <= 100; seed++) {
+    const random = seededRandom(seed);
+    const game = new MahjongGame({ now: () => 0, random });
+    for (let move = 0; move < 72; move++) {
+      const pairs = game.pairs;
+      assert.ok(pairs.length > 0, `Brak ruchu w rozdaniu ${seed}, ruch ${move}.`);
+      const [first, second] = pairs[Math.floor(random() * pairs.length)];
+      game.select(first.id);
+      const result = game.select(second.id);
+      if (result.shuffled) shuffles++;
+      assert.equal(game.tiles.length, 144 - 2 * (move + 1));
+      assert.equal(game.elapsedMs, 0);
+    }
+    assert.equal(game.status, 'won');
+  }
+  assert.ok(shuffles > 0);
+});
+
 test('całą grę można ukończyć, usuwając 72 legalne pary', () => {
   const deal = createSolvableDeal({ random: seededRandom(73) });
   const game = new MahjongGame({ createDeal: () => deal });
   for (const [index, [first, second]] of deal.solution.entries()) {
     assert.equal(game.select(first).type, 'selected');
-    assert.equal(game.select(second).type, index === 71 ? 'won' : 'removed');
+    const result = game.select(second);
+    assert.equal(result.type, index === 71 ? 'won' : 'removed');
+    assert.equal(result.shuffled, false);
   }
   assert.equal(game.status, 'won');
   assert.equal(game.tiles.length, 0);

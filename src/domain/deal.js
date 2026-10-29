@@ -40,17 +40,23 @@ function removalOrder(positions, random) {
     }
     if (!remaining.length) return order;
   }
-  throw new Error('Nie udało się przygotować rozwiązywalnego rozdania.');
+  return null;
 }
 
 export function createSolvableDeal({ positions = createTurtleLayout(), faces = createFaces(), random = Math.random } = {}) {
   if (positions.length !== faces.length) throw new Error('Liczba pozycji i płytek musi być równa.');
   const pairs = pairFaces(faces, random);
-  const solution = removalOrder(positions, random);
+  let layout = positions;
+  let solution = removalOrder(layout, random);
+  if (!solution) {
+    layout = createTurtleLayout().slice(0, positions.length).map((position, index) => ({ ...position, id: positions[index].id }));
+    solution = removalOrder(layout, random);
+  }
+  if (!solution) throw new Error('Nie udało się przygotować rozwiązywalnego rozdania.');
   const assignedFaces = new Map();
   solution.forEach(([first, second], index) => {
     assignedFaces.set(first, pairs[index][0]);
     assignedFaces.set(second, pairs[index][1]);
   });
-  return { tiles: positions.map(position => ({ ...position, face: assignedFaces.get(position.id) })), solution };
+  return { tiles: layout.map(position => ({ ...position, face: assignedFaces.get(position.id) })), solution };
 }

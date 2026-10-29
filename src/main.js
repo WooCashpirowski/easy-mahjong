@@ -49,6 +49,7 @@ function render() {
 function selectTile(id) {
   const result = game.select(id);
   hintedIds = [];
+  if (result.shuffled) board.create(game.tiles);
   render();
   if (result.type === 'won') {
     const { scores, saved } = repository.add(game.elapsedMs);
@@ -60,8 +61,9 @@ function selectTile(id) {
     byId('overlay-action').textContent = 'Zagraj jeszcze raz';
     setStatus(saved ? 'Plansza ukończona. Świetna robota!' : 'Gra ukończona. Nie udało się zapisać wyniku w pamięci przeglądarki.');
     byId('overlay-action').focus();
-  } else if (!game.pairs.length) {
-    setStatus('Brak dostępnych par. Przetasuj pozostałe płytki bez kary czasowej.');
+  } else if (result.shuffled) {
+    setStatus('Brak dostępnych par. Płytki zostały automatycznie przetasowane bez kary czasowej.');
+    board.focusFirstFree();
   } else if (result.type === 'mismatch') {
     setStatus('Te symbole nie tworzą pary. Wybrano nową płytkę.');
   } else if (result.type === 'selected') {
@@ -114,7 +116,7 @@ function finishDialog() {
 byId('hint-button').addEventListener('click', () => {
   hintedIds = game.hint() ?? [];
   render();
-  setStatus(hintedIds.length ? 'Wyróżniono dostępną parę. Do czasu dodano 30 sekund.' : 'Brak dostępnych par. Przetasuj płytki bez kary.');
+  setStatus(hintedIds.length ? 'Wyróżniono dostępną parę. Do czasu dodano 30 sekund.' : 'Brak dostępnej podpowiedzi.');
 });
 
 byId('shuffle-button').addEventListener('click', () => {

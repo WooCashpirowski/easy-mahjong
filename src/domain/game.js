@@ -56,7 +56,9 @@ export class MahjongGame {
         this.startedAt = null;
         this.status = 'won';
       }
-      return { type: this.status === 'won' ? 'won' : 'removed', ids: [selected.id, id] };
+      const shuffled = this.tiles.length > 0 && this.pairs.length === 0;
+      if (shuffled) this.shuffle();
+      return { type: this.status === 'won' ? 'won' : 'removed', ids: [selected.id, id], shuffled };
     }
     this.selectedId = id;
     return { type: selected ? 'mismatch' : 'selected' };
