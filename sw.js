@@ -19,6 +19,7 @@ const APP_FILES = [
   './src/storage/best-times.js',
   './src/ui/board-view.js',
   './src/ui/tile-art.js',
+  './src/ui/glyphs/characters.js',
   './src/ui/format.js',
   './src/ui/ranking-view.js',
   './src/ui/pwa-view.js',

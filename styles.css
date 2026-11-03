@@ -68,9 +68,7 @@ button, a { touch-action: manipulation; }
 .play-surface::before { content: ""; pointer-events: none; position: absolute; inset: 8px; border: 1px solid #9baace24; border-radius: 6px; }
 .tile-field { position: relative; width: min(100cqw, calc(100cqh * 784 / 552)); aspect-ratio: 784 / 552; }
 .tile { position: absolute; width: 6.3776%; height: 11.9565%; padding: 1px; border: 1px solid var(--tile-border); border-radius: 4px; background: linear-gradient(115deg, var(--tile-face), var(--tile-base)); box-shadow: 1px 3px 0 var(--tile-edge), 2px 5px 0 var(--tile-shadow), 2px 7px 5px #060b207a; color: var(--tile-ink); }
-.tile svg { display: block; width: 100%; height: 100%; font-family: "KaiTi", "STKaiti", "SimSun", "Noto Serif CJK SC", serif; }
-.tile .tile-number, .tile .tile-badge { font-family: "Segoe UI", Arial, sans-serif; }
-.tile .tile-glyph { font-family: "Microsoft YaHei", "Noto Sans CJK SC", "SimSun", serif; }
+.tile > svg { display: block; width: 100%; height: 100%; }
 .tile:not(.is-free) { background: var(--tile-blocked); border-color: #9eaecb; }
 .tile.is-free { background: linear-gradient(115deg, var(--tile-face), var(--tile-base)); }
 .tile.is-free:hover:not(:disabled):not(.is-selected):not(.is-hinted) { background: #fff8f2; outline: 2px solid var(--selected); outline-offset: -2px; }
@@ -125,7 +123,8 @@ h2 { font-size: 20px; letter-spacing: -.5px; font-weight: 550; line-height: 1.25
 .how-to .eyebrow { font-size: 7px; letter-spacing: 1.5px; }
 .how-to h2 { font-size: 18px; margin-top: 9px; }
 .example-pair { display: flex; align-items: center; gap: 7px; margin: 19px 0 16px; }
-.example-pair > span { width: 29px; height: 37px; border-radius: 3px; background: var(--tile-face); color: #9e2443; font-family: "KaiTi", "SimSun", serif; font-size: 24px; display: grid; place-items: center; box-shadow: 0 3px 0 var(--tile-edge); }
+.example-pair > span { width: 29px; height: 37px; border-radius: 3px; background: var(--tile-face); display: grid; place-items: center; box-shadow: 0 3px 0 var(--tile-edge); }
+.example-pair > span > svg { display: block; width: 100%; height: 100%; }
 .example-pair > span:nth-child(2) { transform: rotate(7deg); }
 .example-pair > .icon { margin-left: 5px; color: var(--accent); width: 16px; }
 .how-to p { color: var(--muted); font-size: 11px; line-height: 1.8; margin: 0 0 13px; }

@@ -1,11 +1,15 @@
 import { MahjongGame } from './domain/game.js';
 import { BestTimesRepository, BEST_TIMES_KEY } from './storage/best-times.js';
 import { BoardView } from './ui/board-view.js';
+import { tileSvg } from './ui/tile-art.js';
 import { renderRanking } from './ui/ranking-view.js';
 import { formatTime } from './ui/format.js';
 import { setupPwaView } from './ui/pwa-view.js';
 
 const byId = id => document.getElementById(id);
+for (const example of document.querySelectorAll('[data-example-tile]')) {
+  example.innerHTML = tileSvg({ suit: 'honors', value: 'red' });
+}
 const game = new MahjongGame();
 const repository = new BestTimesRepository({
   getItem: key => window.localStorage.getItem(key),
