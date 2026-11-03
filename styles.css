@@ -153,8 +153,6 @@ h2 { font-size: 20px; letter-spacing: -.5px; font-weight: 550; line-height: 1.25
 .rules-list strong { display: block; font-weight: 600; color: var(--text); }
 .dialog .dialog-note { font-size: 11px; border-top: 1px solid var(--border); padding-top: 16px; }
 .dialog > .button { margin-top: 10px; }
-.dialog-small { max-width: 405px; }
-.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
 noscript { display: block; padding: 25px; text-align: center; }
 
 @media (max-width: 1250px) {

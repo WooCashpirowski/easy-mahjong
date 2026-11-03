@@ -17,9 +17,8 @@ const repository = new BestTimesRepository({
 });
 const board = new BoardView(byId('board'), selectTile);
 const rulesDialog = byId('rules-dialog');
-const newGameDialog = byId('new-game-dialog');
 const sidebarDialog = byId('sidebar-dialog');
-const dialogs = [rulesDialog, newGameDialog, sidebarDialog];
+const dialogs = [rulesDialog, sidebarDialog];
 const isDialogOpen = () => dialogs.some(dialog => dialog.open);
 let hintedIds = [];
 let resumeAfterDialog = false;
@@ -83,7 +82,7 @@ function selectTile(id) {
 function startNewGame() {
   game.newGame();
   hintedIds = [];
-  board.create(game.tiles);
+  board.create(game.tiles, { animate: true });
   render();
   setStatus('Wybierz pierwszą płytkę, aby rozpocząć pomiar czasu.');
 }
@@ -134,13 +133,7 @@ byId('shuffle-button').addEventListener('click', () => {
 
 byId('pause-button').addEventListener('click', togglePause);
 byId('overlay-action').addEventListener('click', () => game.status === 'won' ? startNewGame() : togglePause());
-byId('new-game-button').addEventListener('click', () => ['running', 'paused'].includes(game.status) ? showDialog(newGameDialog) : startNewGame());
-byId('cancel-new-game').addEventListener('click', () => newGameDialog.close());
-byId('confirm-new-game').addEventListener('click', () => {
-  resumeAfterDialog = false;
-  newGameDialog.close();
-  startNewGame();
-});
+byId('new-game-button').addEventListener('click', startNewGame);
 
 byId('panel-button').addEventListener('click', () => showDialog(sidebarDialog));
 byId('close-panel-button').addEventListener('click', () => sidebarDialog.close());

@@ -10,7 +10,8 @@ export class BoardView {
     });
   }
 
-  create(tiles) {
+  create(tiles, { animate = false } = {}) {
+    this.dealAnimation?.cancel();
     this.buttons.clear();
     const fragment = document.createDocumentFragment();
     for (const tile of tiles) {
@@ -28,6 +29,12 @@ export class BoardView {
       fragment.append(button);
     }
     this.element.replaceChildren(fragment);
+    if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.dealAnimation = this.element.animate([
+        { opacity: .25, transform: 'translateY(8px)' },
+        { opacity: 1, transform: 'translateY(0)' },
+      ], { duration: 180, easing: 'ease-out' });
+    }
   }
 
   update(game, hintedIds = []) {
