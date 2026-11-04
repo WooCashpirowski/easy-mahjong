@@ -2,15 +2,16 @@ import { GLYPHS } from './glyphs/characters.js';
 
 const INK = '#17231b';
 const GREEN = '#17552c';
+const SEASON_GREEN = '#2b7a43';
 const RED = '#b91e29';
 const GOLD = '#a87412';
 const PAPER = '#f9faf4';
 const NUMERALS = ['一', '二', '三', '四', '伍', '六', '七', '八', '九'];
 const HONORS = {
-  east: { glyph: '東', color: INK, label: 'Wiatr wschodni' },
-  south: { glyph: '南', color: INK, label: 'Wiatr południowy' },
-  west: { glyph: '西', color: INK, label: 'Wiatr zachodni' },
-  north: { glyph: '北', color: INK, label: 'Wiatr północny' },
+  east: { glyph: '東', color: RED, label: 'Wiatr wschodni' },
+  south: { glyph: '南', color: RED, label: 'Wiatr południowy' },
+  west: { glyph: '西', color: RED, label: 'Wiatr zachodni' },
+  north: { glyph: '北', color: RED, label: 'Wiatr północny' },
   red: { glyph: '中', color: RED, label: 'Czerwony smok' },
   green: { glyph: '發', color: GREEN, label: 'Zielony smok' },
   white: { label: 'Biały smok' },
@@ -96,8 +97,8 @@ function flower(value) {
 }
 
 function season(value) {
-  return glyph(SEASON_GLYPHS[value - 1], 5, 6, 38, 45, GREEN) +
-    `<path d="M17 59c0-7 5-9 14-7-1 8-7 10-13 6m0 1 9-5" fill="none" stroke="${GREEN}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return glyph(SEASON_GLYPHS[value - 1], 5, 6, 38, 45, SEASON_GREEN) +
+    `<path d="M17 59c0-7 5-9 14-7-1 8-7 10-13 6m0 1 9-5" fill="none" stroke="${SEASON_GREEN}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
 
 function honor(value) {
